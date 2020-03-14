@@ -8,6 +8,6 @@ jobs:
     - ls -lhit
     - docker build --tag fs2pg --file Dockerfile .
     - docker images
-    - docker run --detatch fs2pg
+    - docker run -d fs2pg
     - docker ps
     - docker rm --force fs2pg
