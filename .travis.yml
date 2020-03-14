@@ -1,14 +1,13 @@
 jobs:
   include:
-  - name: gcc, xenial
-    dist:     xenial
+  - name: gcc, pg 9.5
     language: c
-    compiler: gcc
+    services: docker
+    sudo:     required
     script:
-    - gcc --version
-  - name: gcc, bionic
-    dist:     bionic
-    language: c
-    compiler: gcc
-    script:
-    - gcc --version
+    - ls -lhit
+    - docker build --tag fs2pg --file Dockerfile .
+    - docker images
+    - docker run --detatch fs2pg
+    - docker ps
+    - docker rm --force fs2pg
