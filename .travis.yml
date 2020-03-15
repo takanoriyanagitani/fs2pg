@@ -39,4 +39,6 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "SELECT * FROM f2p_txt('mf'::TEXT)"
+    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
+    - cmp ./mf.csv /pgdata/fs2pg/mf
