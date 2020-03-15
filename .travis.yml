@@ -17,6 +17,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
@@ -60,6 +61,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
@@ -103,6 +105,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
@@ -146,6 +149,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
@@ -189,6 +193,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
@@ -232,6 +237,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
@@ -275,6 +281,7 @@ jobs:
       - PGPORT=5433
       - PGUSER=postgres
     before_script:
+    - ls -litha /var/run/postgresql
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
