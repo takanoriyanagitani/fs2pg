@@ -20,15 +20,10 @@ jobs:
     script:
     - gcc -v -o id2path.so -shared -fPIC -O3 id2path.c -I$(pg_config --includedir-server)
     - pwd
-    - echo $HOME
-    - mkdir $HOME/fs2pg
-    - ln id2path.so $HOME/fs2pg/
-    - ls -lithd $HOME
-    - ls -lith  $HOME/
-    - ls -lith  $HOME/fs2pg/
-    - ls -lith  /var
-    - ls -lith  /var/lib/postgresql
-    - ls -lith  /var/run/postgresql
-    - ls -lith  /etc/postgresql
-    - psql --dbname test_database --command "CREATE OR REPLACE FUNCTION id2path(TEXT) RETURNS TEXT AS '/home/travis/fs2pg/id2path', 'id2path' LANGUAGE C STRICT"
+    - mkdir -p /var/lib/postgresql/9.5/lib/fs2pg
+    - ln id2path.so /var/lib/postgresql/9.5/lib/fs2pg/
+    - ls -litha /var/run/postgresql
+    - ls -litha /var/lib/postgresql/9.5
+    - ls -litha /etc/postgresql/9.5
+    - psql --dbname test_database --command "CREATE OR REPLACE FUNCTION id2path(TEXT) RETURNS TEXT AS '/var/lib/postgresql/9.5/lib/fs2pg/id2path', 'id2path' LANGUAGE C STRICT"
     - psql --dbname test_database --command "SELECT id2path('hw')"
