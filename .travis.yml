@@ -21,13 +21,14 @@ jobs:
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -41,7 +42,7 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, xeinal, pg 9.6 as service
@@ -65,13 +66,14 @@ jobs:
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -85,7 +87,7 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, xeinal, pg 10 as service
@@ -109,13 +111,14 @@ jobs:
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -129,7 +132,7 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, xeinal, pg 11 as service
@@ -153,13 +156,14 @@ jobs:
     - PGPORT=5433 psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -173,7 +177,7 @@ jobs:
     - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_hsz()"
     - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - PGPORT=5433 psql --dbname test_database --command "SELECT id2path('mf')"
-    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, xeinal, pg 12 as service
@@ -197,13 +201,14 @@ jobs:
     - PGPORT=5433 psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -217,7 +222,7 @@ jobs:
     - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_hsz()"
     - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - PGPORT=5433 psql --dbname test_database --command "SELECT id2path('mf')"
-    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, bionic, pg 9.5 as service
@@ -241,13 +246,14 @@ jobs:
     - psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -261,7 +267,7 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, bionic, pg 12 as service
@@ -285,13 +291,14 @@ jobs:
     - PGPORT=5433 psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
-    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server) -lz
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
     - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'cat /pgdata/fs2pg/mf | gzip --stdout --keep --best > /pgdata/fs2pg/mz'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
@@ -305,6 +312,6 @@ jobs:
     - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_hsz()"
     - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - PGPORT=5433 psql --dbname test_database --command "SELECT id2path('mf')"
-    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mz'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
     - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf

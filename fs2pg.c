@@ -6,6 +6,8 @@
 #include <funcapi.h>
 #include <access/htup_details.h>
 
+#include <zlib.h>
+
 #ifdef PG_MODULE_MAGIC
 PG_MODULE_MAGIC;
 #endif
@@ -41,7 +43,8 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
   FuncCallContext* ctx = NULL;
 
   struct {
-    FILE* file;
+    //FILE*  file;
+    gzFile file;
     char* filename16;
     text* txt8;
     char* line;
@@ -73,7 +76,8 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     file_info->line       = NULL;
     file_info->number     = 0;
     snprintf(file_info->filename16, 65536, "/pgdata/fs2pg/%.*s", VARSIZE(id)-VARHDRSZ, VARDATA(id));
-    file_info->file = fopen(file_info->filename16, "rb");
+    //file_info->file = fopen(file_info->filename16, "rb");
+    file_info->file = gzopen(file_info->filename16, "rb");
     SET_VARSIZE(file_info->txt8, 256-VARHDRSZ);
 
     ctx->user_fctx = file_info;
@@ -86,9 +90,11 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
 
   if(NULL == file_info->file) SRF_RETURN_DONE(ctx);
 
-  file_info->line = fgets(VARDATA(file_info->txt8), 256-VARHDRSZ, file_info->file);
+  //file_info->line = fgets(VARDATA(file_info->txt8), 256-VARHDRSZ, file_info->file);
+  file_info->line = gzgets(file_info->file, VARDATA(file_info->txt8), 256-VARHDRSZ);
   if(NULL == file_info->line){
-    fclose(file_info->file);
+    //fclose(file_info->file);
+    gzclose(file_info->file);
     SRF_RETURN_DONE(ctx);
   } else {
     Datum values[2] = {0};
