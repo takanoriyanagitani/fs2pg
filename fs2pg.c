@@ -45,6 +45,7 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     char* filename16;
     char* buf8;
     char* line;
+    uint32_t number;
   } *file_info;
 
   if(SRF_IS_FIRSTCALL()){
@@ -70,6 +71,7 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     file_info->filename16 = (char*) palloc(65536);
     file_info->buf8       = (char*) palloc(256);
     file_info->line       = NULL;
+    file_info->number     = 0;
     snprintf(file_info->filename16, 65536, "/pgdata/fs2pg/%.*s", VARSIZE(id)-VARHDRSZ, VARDATA(id));
     file_info->file = fopen(file_info->filename16, "rb");
 
@@ -88,9 +90,11 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     fclose(file_info->file);
     SRF_RETURN_DONE(ctx);
   } else {
-    Datum values[1] = {0};
-    bool  nulls[1]  = {0};
+    file_info->number++;
+    Datum values[2] = {0};
+    bool  nulls[2]  = {0};
     nulls[0] = 1;
+    nulls[1] = 1;
     HeapTuple ht = heap_form_tuple(ctx->tuple_desc, values, nulls);
     PG_RETURN_DATUM(HeapTupleGetDatum(ht));
   }
