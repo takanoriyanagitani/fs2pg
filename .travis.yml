@@ -1,6 +1,7 @@
 jobs:
   include:
   - name: gcc, pg 9.5 as service
+    sudo: required
     language: c
     services: postgresql
     addons:
@@ -16,7 +17,12 @@ jobs:
     before_script:
     - psql --user postgres --command 'CREATE DATABASE test_database'
     script:
-    - psql --user postgres --command 'SELECT 1 AS c1'
+    - gcc -v -o id2path.so -shared -fPIC -O3 id2path.c -I$(pg_config --includedir-server)
+    - pwd
+    - echo $HOME
+    - mkdir $HOME/fs2pg
+    - ln id2path.so $HOME/fs2pg
+    - sudo systemctl restart postgresql@9.5-main
 
   #- name: gcc, pg 9.5
   #  language: c
