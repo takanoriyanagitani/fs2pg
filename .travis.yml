@@ -4,10 +4,11 @@ jobs:
     language: c
     services: docker
     sudo:     required
-    script:
-    - ls -lhit
+    before_script:
     - docker build --tag fs2pg --file Dockerfile .
-    - docker images
     - docker run -d fs2pg
+    script:
     - docker ps
+    - docker exec -i fs2pg which psql
+    after_script:
     - docker rm --force fs2pg
