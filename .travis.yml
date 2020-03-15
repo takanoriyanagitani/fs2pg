@@ -37,4 +37,4 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "SELECT * FROM f2p_txt('mf')"
+    - psql --dbname test_database --command "SELECT * FROM f2p_txt('mf'::TEXT)"
