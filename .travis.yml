@@ -20,8 +20,10 @@ jobs:
     script:
     - gcc -v -o id2path.so -shared -fPIC -O3 id2path.c -I$(pg_config --includedir-server)
     - pwd
-    - mkdir -p /var/lib/postgresql/9.5/lib/fs2pg
-    - ln id2path.so /var/lib/postgresql/9.5/lib/fs2pg/
+    - ls -litha /var/lib/postgresql/9.5
+    - sudo mkdir -p /var/lib/postgresql/9.5/lib/fs2pg
+    - ls -litha /var/lib/postgresql/9.5/lib/fs2pg
+    - sudo ln id2path.so /var/lib/postgresql/9.5/lib/fs2pg/
     - ls -litha /var/run/postgresql
     - ls -litha /var/lib/postgresql/9.5
     - ls -litha /etc/postgresql/9.5
