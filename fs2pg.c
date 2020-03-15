@@ -43,7 +43,7 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
   struct {
     FILE* file;
     char* filename16;
-    char* buf8;
+    text* txt8;
     char* line;
     uint32_t number;
   } *file_info;
@@ -69,11 +69,12 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     text* id = PG_GETARG_TEXT_P(0);
     file_info = palloc(sizeof(*file_info));
     file_info->filename16 = (char*) palloc(65536);
-    file_info->buf8       = (char*) palloc(256);
+    file_info->txt8       = (text*) palloc(256);
     file_info->line       = NULL;
     file_info->number     = 0;
     snprintf(file_info->filename16, 65536, "/pgdata/fs2pg/%.*s", VARSIZE(id)-VARHDRSZ, VARDATA(id));
     file_info->file = fopen(file_info->filename16, "rb");
+    SET_VARSIZE(file_info->txt8, 256-VARHDRSZ);
 
     ctx->user_fctx = file_info;
 
@@ -85,7 +86,7 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
 
   if(NULL == file_info->file) SRF_RETURN_DONE(ctx);
 
-  file_info->line = fgets(file_info->buf8, 256, file_info->file);
+  file_info->line = fgets(VARDATA(file_info->txt8), 256-VARHDRSZ, file_info->file);
   if(NULL == file_info->line){
     fclose(file_info->file);
     SRF_RETURN_DONE(ctx);
@@ -93,8 +94,8 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     Datum values[2] = {0};
     bool  nulls[2]  = {0};
     nulls[0] = 0; values[0] = UInt32GetDatum(++file_info->number);
-    nulls[1] = 0; values[1] = CStringGetDatum(file_info->line);
+    nulls[1] = 0; values[1] = PointerGetDatum(file_info->txt8);
     HeapTuple ht = heap_form_tuple(ctx->tuple_desc, values, nulls);
-    PG_RETURN_DATUM(HeapTupleGetDatum(ht));
+    SRF_RETURN_NEXT(ctx, HeapTupleGetDatum(ht));
   }
 }
