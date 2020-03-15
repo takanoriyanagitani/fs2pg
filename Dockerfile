@@ -1,7 +1,7 @@
 FROM postgres:9.5 AS builder
 RUN apt-get update
 RUN apt-get install -y gcc
-RUN apt-get install -y postgresql-server-dev-all
+RUN apt-get install -y postgresql-server-dev-9.5
 
 WORKDIR /build-fs2pg
 COPY ./id2path.c ./
