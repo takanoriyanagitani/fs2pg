@@ -150,7 +150,7 @@ jobs:
       - PGUSER=postgres
     before_script:
     - ls -litha /var/run/postgresql
-    - psql --command 'CREATE DATABASE test_database'
+    - PGPORT=5433 psql --command 'CREATE DATABASE test_database'
     script:
     - pwd
     - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
@@ -169,12 +169,12 @@ jobs:
     - ls -litha /var/lib/postgresql/11
     - ls -litha /var/run/postgresql
     - ls -litha /etc/postgresql/11/main
-    - psql --dbname test_database --file fs2pg.sql
-    - psql --dbname test_database --command "SELECT f2p_hsz()"
-    - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
-    - psql --dbname test_database --command "SELECT id2path('mf')"
-    - psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
-    - psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
+    - PGPORT=5433 psql --dbname test_database --file fs2pg.sql
+    - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_hsz()"
+    - PGPORT=5433 psql --dbname test_database --command "SELECT f2p_tsz('mf')"
+    - PGPORT=5433 psql --dbname test_database --command "SELECT id2path('mf')"
+    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT * FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | cat
+    - PGPORT=5433 psql --dbname test_database --command "COPY (SELECT line FROM f2p_txt('mf'::TEXT)) TO STDOUT WITH (FORMAT CSV)" | tee ./mf.csv
     - cmp ./mf.csv /pgdata/fs2pg/mf
   - name: gcc, xeinal, pg 12 as service
     dist: xenial
