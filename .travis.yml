@@ -30,6 +30,6 @@ jobs:
     - ls -litha /var/run/postgresql
     - ls -litha /etc/postgresql/9.5/main
     - psql --dbname test_database --file fs2pg.sql
-    - psql --dbname test_database --command "SELECT id2path('hw')"
-    - psql --dbname test_database --command "SELECT f2p_tsz('hw')"
     - psql --dbname test_database --command "SELECT f2p_hsz()"
+    - psql --dbname test_database --command "SELECT f2p_tsz('hw')"
+    - psql --dbname test_database --command "SELECT id2path('hw')"
