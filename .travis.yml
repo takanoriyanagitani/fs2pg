@@ -21,6 +21,8 @@ jobs:
     - pwd
     - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
     - ls -lith
+    - sudo mkdir -p /pgdata/fs2pg
+    - sudo echo 3776 > /pgdata/fs2pg/mf
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
     - sudo ls -litha /var/lib/postgresql/9.5/main
