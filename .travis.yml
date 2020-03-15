@@ -1,14 +1,32 @@
 jobs:
   include:
-  - name: gcc, pg 9.5
+  - name: gcc, pg 9.5 as service
     language: c
-    services: docker
-    sudo:     required
+    services: postgresql
+    addons:
+      postgresql: 9.5
+      apt:
+        packages:
+        - postgresql-9.5
+        - postgresql-client-9.5
+        - postgresql-server-dev-9.5
+    env:
+      global:
+      - PGPORT=5433
     before_script:
-    - docker build --tag fs2pg:latest --file Dockerfile .
-    - docker run -d --name fs2pg fs2pg:latest
+    - psql --user postgres --command 'CREATE DATABASE test_database'
     script:
-    - docker ps
-    - docker exec -i fs2pg which psql
-    after_script:
-    - docker rm --force fs2pg
+    - psql --user postgres --command 'SELECT 1 AS c1'
+
+  #- name: gcc, pg 9.5
+  #  language: c
+  #  services: docker
+  #  sudo:     required
+  #  before_script:
+  #  - docker build --tag fs2pg:latest --file Dockerfile .
+  #  - docker run -d --name fs2pg fs2pg:latest
+  #  script:
+  #  - docker ps
+  #  - docker exec -i fs2pg which psql
+  #  after_script:
+  #  - docker rm --force fs2pg
