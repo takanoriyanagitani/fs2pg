@@ -18,15 +18,18 @@ jobs:
     before_script:
     - psql --command 'CREATE DATABASE test_database'
     script:
-    - gcc -v -o id2path.so -shared -fPIC -O3 id2path.c -I$(pg_config --includedir-server)
     - pwd
+    - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
+    - ls -lith
+    - sudo mkdir -p /lib/fs2pg
+    - sudo chmod 755 /lib/fs2pg
     - sudo ls -litha /var/lib/postgresql/9.5/main
-    - sudo mkdir -p /var/lib/postgresql/9.5/lib/fs2pg
-    - ls -litha /var/lib/postgresql/9.5/lib/fs2pg
-    - sudo ln id2path.so /var/lib/postgresql/9.5/lib/fs2pg/
+    - sudo ln fs2pg.so /lib/fs2pg/
+    - ls -l /lib/fs2pg
     - ls -litha /var/lib/postgresql/9.5
     - ls -litha /var/run/postgresql
     - ls -litha /etc/postgresql/9.5/main
-    - psql --dbname test_database --command "CREATE OR REPLACE FUNCTION id2path(TEXT) RETURNS TEXT AS '/var/lib/postgresql/9.5/lib/fs2pg/id2path', 'id2path' LANGUAGE C STRICT"
+    - psql --dbname test_database --file fs2pg.sql
     - psql --dbname test_database --command "SELECT id2path('hw')"
-    - sudo netstat -anop | grep 5433
+    - psql --dbname test_database --command "SELECT f2p_tsz('hw')"
+    - psql --dbname test_database --command "SELECT f2p_hsz()"
