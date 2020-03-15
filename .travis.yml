@@ -22,7 +22,9 @@ jobs:
     - gcc -Wall -Werror -v -o fs2pg.so -shared -fPIC -O3 fs2pg.c -I$(pg_config --includedir-server)
     - ls -lith
     - sudo mkdir -p /pgdata/fs2pg
-    - sudo bash -c 'echo 3776 > /pgdata/fs2pg/mf'
+    - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
+    - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
+    - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
     - sudo ls -litha /var/lib/postgresql/9.5/main
@@ -35,3 +37,4 @@ jobs:
     - psql --dbname test_database --command "SELECT f2p_hsz()"
     - psql --dbname test_database --command "SELECT f2p_tsz('mf')"
     - psql --dbname test_database --command "SELECT id2path('mf')"
+    - psql --dbname test_database --command "SELECT * FROM f2p_txt('mf')"
