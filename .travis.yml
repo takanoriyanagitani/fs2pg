@@ -21,18 +21,7 @@ jobs:
     - pwd
     - echo $HOME
     - mkdir $HOME/fs2pg
-    - ln id2path.so $HOME/fs2pg
-    - sudo systemctl restart postgresql@9.5-main
-
-  #- name: gcc, pg 9.5
-  #  language: c
-  #  services: docker
-  #  sudo:     required
-  #  before_script:
-  #  - docker build --tag fs2pg:latest --file Dockerfile .
-  #  - docker run -d --name fs2pg fs2pg:latest
-  #  script:
-  #  - docker ps
-  #  - docker exec -i fs2pg which psql
-  #  after_script:
-  #  - docker rm --force fs2pg
+    - ln id2path.so $HOME/fs2pg/
+    - ls -lith $HOME/fs2pg/
+    - psql --user postgres --database test_database --command "CREATE OR REPLACE FUNCTION id2path(TEXT) RETURNS TEXT AS '/home/travis/fs2pg/id2path', 'id2path' LANGUAGE C STRICT"
+    - psql --user postgres --database test_database --command "SELECT id2path('hw')"
