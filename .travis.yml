@@ -24,6 +24,8 @@ jobs:
     - sudo mkdir -p /pgdata/fs2pg
     - sudo bash -c 'echo h    >  /pgdata/fs2pg/mf'
     - sudo bash -c 'echo 3776 >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'echo c    >> /pgdata/fs2pg/mf'
+    - sudo bash -c 'echo j    >> /pgdata/fs2pg/mf'
     - ls -lith /pgdata/fs2pg/
     - sudo mkdir -p /lib/fs2pg
     - sudo chmod 755 /lib/fs2pg
