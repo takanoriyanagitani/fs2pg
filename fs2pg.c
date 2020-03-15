@@ -93,7 +93,7 @@ Datum f2p_txt(PG_FUNCTION_ARGS){
     Datum values[2] = {0};
     bool  nulls[2]  = {0};
     nulls[0] = 0; values[0] = UInt32GetDatum(file_info->number++);
-    nulls[1] = 1;
+    nulls[1] = 0; values[1] = CStringGetDatum(file_info->line);
     HeapTuple ht = heap_form_tuple(ctx->tuple_desc, values, nulls);
     PG_RETURN_DATUM(HeapTupleGetDatum(ht));
   }
