@@ -5,8 +5,8 @@ jobs:
     services: docker
     sudo:     required
     before_script:
-    - docker build --tag fs2pg --file Dockerfile .
-    - docker run -d fs2pg
+    - docker build --tag fs2pg:latest --file Dockerfile .
+    - docker run -d --name fs2pg fs2pg:latest
     script:
     - docker ps
     - docker exec -i fs2pg which psql
