@@ -14,8 +14,9 @@ jobs:
     env:
       global:
       - PGPORT=5433
+      - PGUSER=postgres
     before_script:
-    - psql --user postgres --command 'CREATE DATABASE test_database'
+    - psql --command 'CREATE DATABASE test_database'
     script:
     - gcc -v -o id2path.so -shared -fPIC -O3 id2path.c -I$(pg_config --includedir-server)
     - pwd
@@ -23,5 +24,5 @@ jobs:
     - mkdir $HOME/fs2pg
     - ln id2path.so $HOME/fs2pg/
     - ls -lith $HOME/fs2pg/
-    - psql --user postgres --database test_database --command "CREATE OR REPLACE FUNCTION id2path(TEXT) RETURNS TEXT AS '/home/travis/fs2pg/id2path', 'id2path' LANGUAGE C STRICT"
-    - psql --user postgres --database test_database --command "SELECT id2path('hw')"
+    - psql --dbname test_database --command "CREATE OR REPLACE FUNCTION id2path(TEXT) RETURNS TEXT AS '/home/travis/fs2pg/id2path', 'id2path' LANGUAGE C STRICT"
+    - psql --dbname test_database --command "SELECT id2path('hw')"
