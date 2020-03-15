@@ -16,7 +16,7 @@ Datum id2path(PG_FUNCTION_ARGS){
   const char* basedir = NULL == env_val ? "/pgdata/fs2pg" : env_val;
   const uint16_t blen = strlen(basedir);
   const uint16_t ilen = VARSIZE(id)-VARHDRSZ;
-  const uint16_t psz  = blen + ilen + 1 + VARHDRSZ;
+  const uint16_t psz  = blen + ilen + 1 + VARHDRSZ + 1; // '/', '\0'
   text* idpath = (text*)palloc(psz);
   SET_VARSIZE(idpath, psz);
   snprintf(VARDATA(idpath), psz-VARHDRSZ, "%s/%.*s", basedir, ilen, VARDATA(id));
